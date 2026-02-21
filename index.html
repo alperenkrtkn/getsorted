@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetSorted — Your 24/7 AI Receptionist</title>
+    <meta name="description" content="Never miss a customer again. GetSorted provides intelligent AI assistants for your business WhatsApp — answering queries, booking appointments, and delighting customers around the clock.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A96E;
+            --gold-light: #DFC090;
+            --gold-dark: #A8843F;
+            --black: #0A0A0A;
+            --dark: #111111;
+            --dark-mid: #1A1A1A;
+            --dark-light: #222222;
+            --cream: #FAFAF7;
+            --cream-dark: #F2F0EB;
+            --text-dark: #1A1A1A;
+            --text-mid: #555555;
+            --text-light: #999999;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: var(--cream);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.25rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 0.85rem 3rem;
+            border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-text span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold) !important;
+            border-radius: 2px;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.08em !important;
+            text-transform: uppercase;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold);
+            color: var(--black) !important;
+        }
+
+        /* Mobile menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 1.5px;
+            background: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            background: var(--black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 50% 50%, rgba(201, 169, 110, 0.06) 0%, transparent 60%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(2%, -2%) scale(1.05); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            border: 1px solid rgba(201, 169, 110, 0.25);
+            border-radius: 100px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.3s forwards;
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-badge span {
+            font-size: 0.75rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--white);
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.5s forwards;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.7s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.9s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            border-radius: 2px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            color: var(--white);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.2s forwards;
+        }
+
+        .hero-scroll span {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        /* ===== SECTION COMMON ===== */
+        section {
+            padding: 7rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.25rem;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-mid);
+            max-width: 550px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ===== PROBLEM/SOLUTION ===== */
+        .problem {
+            background: var(--cream);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+            align-items: start;
+        }
+
+        .problem-card {
+            padding: 2.5rem;
+            border-radius: 3px;
+        }
+
+        .problem-card.bad {
+            background: var(--white);
+            border: 1px solid #E8E5E0;
+        }
+
+        .problem-card.good {
+            background: var(--dark);
+            color: var(--white);
+            border: 1px solid rgba(201, 169, 110, 0.15);
+        }
+
+        .problem-card-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .problem-card.bad .problem-card-label {
+            color: #B0A090;
+        }
+
+        .problem-card.good .problem-card-label {
+            color: var(--gold);
+        }
+
+        .problem-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .problem-card.good .problem-item {
+            border-bottom-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .problem-item:last-child {
+            border-bottom: none;
+        }
+
+        .problem-item-icon {
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+            font-size: 0.85rem;
+        }
+
+        .problem-card.bad .problem-item {
+            color: var(--text-mid);
+        }
+
+        .problem-card.good .problem-item {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how {
+            background: var(--white);
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .how-step {
+            position: relative;
+        }
+
+        .how-step-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: rgba(201, 169, 110, 0.15);
+            line-height: 1;
+            margin-bottom: 1.25rem;
+        }
+
+        .how-step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .how-step p {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .how-step-line {
+            position: absolute;
+            top: 2rem;
+            right: -1.5rem;
+            width: 3rem;
+            height: 1px;
+            background: linear-gradient(to right, var(--gold-light), transparent);
+        }
+
+        .how-step:last-child .how-step-line {
+            display: none;
+        }
+
+        /* ===== INDUSTRIES ===== */
+        .industries {
+            background: var(--cream);
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .industry-card {
+            padding: 2.25rem;
+            background: var(--white);
+            border: 1px solid #E8E5E0;
+            border-radius: 3px;
+            transition: all 0.4s ease;
+        }
+
+        .industry-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .industry-icon {
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .industry-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .industry-card p {
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            line-height: 1.65;
+            font-weight: 300;
+        }
+
+        /* ===== DEMO / CONVERSATION ===== */
+        .demo {
+            background: var(--dark);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(201, 169, 110, 0.05) 0%, transparent 60%);
+        }
+
+        .demo .section-subtitle {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .demo-phone {
+            background: var(--dark-mid);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 340px;
+            justify-self: center;
+        }
+
+        .demo-phone-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 1.25rem;
+        }
+
+        .demo-phone-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .demo-phone-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .demo-phone-status {
+            font-size: 0.7rem;
+            color: #4ADE80;
+        }
+
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            opacity: 0;
+            animation: chatAppear 0.4s ease forwards;
+        }
+
+        .chat-msg.user {
+            align-self: flex-end;
+            background: #005C4B;
+            color: var(--white);
+        }
+
+        .chat-msg.agent {
+            align-self: flex-start;
+            background: var(--dark-light);
+            color: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chat-msg:nth-child(1) { animation-delay: 0.5s; }
+        .chat-msg:nth-child(2) { animation-delay: 1.2s; }
+        .chat-msg:nth-child(3) { animation-delay: 2s; }
+        .chat-msg:nth-child(4) { animation-delay: 2.8s; }
+        .chat-msg:nth-child(5) { animation-delay: 3.5s; }
+
+        @keyframes chatAppear {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .demo-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .demo-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .demo-feature-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .demo-feature h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--white);
+        }
+
+        .demo-feature p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* ===== PRICING ===== */
+        .pricing {
+            background: var(--cream);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            padding: 2.5rem;
+            border-radius: 3px;
+            background: var(--white);
+            border: 1px solid #E8E5E0;
+            transition: all 0.4s ease;
+        }
+
+        .pricing-card.featured {
+            background: var(--dark);
+            color: var(--white);
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            position: relative;
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -0.6rem;
+            right: 1.5rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--gold);
+            color: var(--black);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 1px;
+        }
+
+        .pricing-card-name {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .pricing-card-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-card-price span {
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+        }
+
+        .pricing-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .pricing-card.featured .pricing-card-desc {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .pricing-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-mid);
+        }
+
+        .pricing-card.featured .pricing-features li {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: 0.9rem;
+            text-align: center;
+            border-radius: 2px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pricing-card:not(.featured) .pricing-btn {
+            background: transparent;
+            border: 1px solid var(--text-dark);
+            color: var(--text-dark);
+        }
+
+        .pricing-card:not(.featured) .pricing-btn:hover {
+            background: var(--text-dark);
+            color: var(--white);
+        }
+
+        .pricing-card.featured .pricing-btn {
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            color: var(--black);
+        }
+
+        .pricing-card.featured .pricing-btn:hover {
+            background: var(--gold-light);
+        }
+
+        /* ===== FAQ ===== */
+        .faq {
+            background: var(--white);
+        }
+
+        .faq-list {
+            max-width: 700px;
+            margin: 4rem auto 0;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #E8E5E0;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 0;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--gold-dark);
+        }
+
+        .faq-icon {
+            color: var(--gold);
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+            font-weight: 300;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta {
+            background: var(--dark);
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .cta h2 em {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 1rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--black);
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.03em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        /* ===== ANIMATIONS ON SCROLL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            nav.scrolled {
+                padding: 0.75rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 4rem;
+                min-height: 90vh;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-scroll {
+                display: none;
+            }
+
+            section {
+                padding: 4.5rem 1.5rem;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .how-steps {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .how-step-line {
+                display: none;
+            }
+
+            .industries-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .demo-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .demo-phone {
+                order: -1;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="#" class="logo">
+            <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="1" width="34" height="34" rx="8" stroke="#C9A96E" stroke-width="1.5"/>
+                <path d="M11 18.5L15.5 23L25 13" stroke="#C9A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">Get<span>Sorted</span></span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="#how">How It Works</a>
+            <a href="#industries">Industries</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact" class="nav-cta">Get Started</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            <span>AI-Powered Business Assistant</span>
+        </div>
+        <h1>Your customers deserve answers, <em>not voicemail</em></h1>
+        <p class="hero-sub">An AI receptionist that handles your WhatsApp around the clock — answering enquiries, booking appointments, and never missing a message.</p>
+        <div class="hero-actions">
+            <a href="#contact" class="btn-primary">Get Started</a>
+            <a href="#how" class="btn-secondary">See How It Works</a>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- PROBLEM / SOLUTION -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-label">The Problem & The Solution</div>
+                <h2 class="section-title">What happens when<br>you can't answer?</h2>
+                <p class="section-subtitle">Every missed message is a lost customer. Every late reply costs you trust.</p>
+            </div>
+            <div class="problem-grid reveal">
+                <div class="problem-card bad">
+                    <div class="problem-card-label">
+                        <span>✕</span> Without GetSorted
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Customers message at 9pm — no one replies until tomorrow
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Weekend enquiries disappear into the void
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Staff spend hours answering the same questions repeatedly
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Potential clients go to competitors who respond first
+                    </div>
+                </div>
+                <div class="problem-card good">
+                    <div class="problem-card-label">
+                        <span>✓</span> With GetSorted
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Every message answered instantly, 24 hours a day
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Appointments booked while you sleep
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Your team freed up to focus on what actually matters
+                    </div>
+                    <div class="problem-item">
+                        <span class="problem-item-icon">◦</span>
+                        Every conversation logged and sent to you automatically
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">Live in 48 hours.<br>No tech skills needed.</h2>
+                <p class="section-subtitle">We handle the entire setup. You just tell us about your business.</p>
+            </div>
+            <div class="how-steps reveal">
+                <div class="how-step">
+                    <div class="how-step-number">01</div>
+                    <h3>Share Your Details</h3>
+                    <p>Tell us about your services, pricing, opening hours, and frequently asked questions. A simple form — takes 15 minutes.</p>
+                    <div class="how-step-line"></div>
+                </div>
+                <div class="how-step">
+                    <div class="how-step-number">02</div>
+                    <h3>We Build Your Assistant</h3>
+                    <p>We create a bespoke AI receptionist trained on your business. It knows your services, speaks your tone, and handles real conversations — not robotic scripts.</p>
+                    <div class="how-step-line"></div>
+                </div>
+                <div class="how-step">
+                    <div class="how-step-number">03</div>
+                    <h3>Go Live on WhatsApp</h3>
+                    <p>Your AI assistant goes live on a dedicated WhatsApp line. Customers message, it responds. You get notified of every conversation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INDUSTRIES -->
+    <section class="industries" id="industries">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-label">Industries</div>
+                <h2 class="section-title">Built for businesses<br>that talk to customers</h2>
+                <p class="section-subtitle">If your customers call or message, GetSorted can handle it.</p>
+            </div>
+            <div class="industries-grid reveal">
+                <div class="industry-card">
+                    <div class="industry-icon">🦷</div>
+                    <h3>Dental & Health Clinics</h3>
+                    <p>Appointment booking, treatment enquiries, opening hours, and emergency guidance — all handled instantly.</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">🍽️</div>
+                    <h3>Restaurants & Cafés</h3>
+                    <p>Reservations, menu questions, allergen info, and takeaway orders answered without tying up your staff.</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">🏨</div>
+                    <h3>Hotels & B&Bs</h3>
+                    <p>Room availability, pricing, check-in details, and local recommendations — in any language, any time.</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">🏠</div>
+                    <h3>Estate Agents</h3>
+                    <p>Property enquiries, viewing bookings, and instant responses to buyer questions — even at midnight.</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">💇</div>
+                    <h3>Salons & Spas</h3>
+                    <p>Treatment bookings, pricing, availability checks, and aftercare advice — your front desk, automated.</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">⚖️</div>
+                    <h3>Professional Services</h3>
+                    <p>Initial consultations, service descriptions, and appointment scheduling for law firms, accountants, and advisors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO CONVERSATION -->
+    <section class="demo" id="demo">
+        <div class="container">
+            <div class="reveal">
+                <div class="section-label">See It In Action</div>
+                <h2 class="section-title" style="color: var(--white);">Not a chatbot.<br>A <em style="color: var(--gold); font-style: italic;">conversation.</em></h2>
+                <p class="section-subtitle">Your AI assistant talks like a real member of your team — natural, helpful, and always on-brand.</p>
+            </div>
+            <div class="demo-content reveal">
+                <div class="demo-phone">
+                    <div class="demo-phone-header">
+                        <div class="demo-phone-avatar">GS</div>
+                        <div>
+                            <div class="demo-phone-name">Sunrise Dental</div>
+                            <div class="demo-phone-status">● Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="chat-msg user">Hi, are you open on Saturdays?</div>
+                        <div class="chat-msg agent">Hello! Yes, we're open Saturdays from 9am to 1pm. Would you like to book an appointment?</div>
+                        <div class="chat-msg user">Yes please, I need a cleaning</div>
+                        <div class="chat-msg agent">Of course! A dental cleaning is £45 and takes about 30 minutes. We have availability this Saturday at 10am or 11:30am — which works better for you?</div>
+                        <div class="chat-msg user">10am is perfect 👍</div>
+                    </div>
+                </div>
+                <div class="demo-features">
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">🗣</div>
+                        <div>
+                            <h4>Natural Conversation</h4>
+                            <p>Not scripted menus or button trees. Real, flowing dialogue that understands context and nuance.</p>
+                        </div>
+                    </div>
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">⚡</div>
+                        <div>
+                            <h4>Instant Responses</h4>
+                            <p>Replies in seconds, not hours. Your customers never wait, even at 3am on a Sunday.</p>
+                        </div>
+                    </div>
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">📋</div>
+                        <div>
+                            <h4>Full Transparency</h4>
+                            <p>Every conversation is logged and sent to you. See exactly what your assistant said and what customers asked.</p>
+                        </div>
+                    </div>
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">🌍</div>
+                        <div>
+                            <h4>Multilingual</h4>
+                            <p>Speaks over 30 languages fluently. Perfect for tourism, hospitality, and international clients.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="reveal" style="text-align: center;">
+                <div class="section-label">Pricing</div>
+                <h2 class="section-title">Simple, honest pricing</h2>
+                <p class="section-subtitle" style="margin: 0 auto;">No hidden fees. No long contracts. Cancel anytime.</p>
+            </div>
+            <div class="pricing-grid reveal">
+                <div class="pricing-card">
+                    <div class="pricing-card-name">Essential</div>
+                    <div class="pricing-card-price">£249 <span>/ month</span></div>
+                    <div class="pricing-card-desc">Everything you need to get started</div>
+                    <ul class="pricing-features">
+                        <li>AI WhatsApp Assistant</li>
+                        <li>Up to 500 conversations / month</li>
+                        <li>Trained on your business</li>
+                        <li>Email conversation reports</li>
+                        <li>48-hour setup</li>
+                        <li>Ongoing support</li>
+                    </ul>
+                    <a href="#contact" class="pricing-btn">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-card-name">Growth</div>
+                    <div class="pricing-card-price">£399 <span>/ month</span></div>
+                    <div class="pricing-card-desc">For businesses ready to scale</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Essential</li>
+                        <li>Up to 1,500 conversations / month</li>
+                        <li>WhatsApp summary notifications</li>
+                        <li>Priority support</li>
+                        <li>Monthly performance review</li>
+                        <li>Multilingual support</li>
+                    </ul>
+                    <a href="#contact" class="pricing-btn">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="reveal" style="text-align: center;">
+                <div class="section-label">FAQ</div>
+                <h2 class="section-title">Common questions</h2>
+            </div>
+            <div class="faq-list reveal">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Is this a chatbot?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No. Unlike traditional chatbots with rigid menus and scripted replies, GetSorted uses advanced AI that holds natural, flowing conversations — just like a real receptionist would. It understands context, handles unexpected questions, and responds in a warm, human tone.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Can I see what the assistant says to my customers?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely. Every conversation is logged and you receive automatic notifications — either by email or directly to your personal WhatsApp. Full transparency, always.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        What happens if the AI can't answer a question?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>If the assistant encounters something outside its knowledge, it politely lets the customer know and offers to connect them with you directly. No guessing, no making things up.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Do I need to change my phone number?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No. We set up a dedicated WhatsApp line for your AI assistant. You keep your personal number exactly as it is. Customers simply message the new line for instant help.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        How long does setup take?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Most businesses are live within 48 hours. You fill out a short form about your business, we do the rest. No technical knowledge required on your end.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Can I cancel anytime?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. There are no long-term contracts. You pay monthly and can cancel at any time with no penalties.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="reveal">
+                <h2>Ready to never miss<br>a customer <em>again?</em></h2>
+                <p>Get in touch and we'll have your AI assistant live within 48 hours.</p>
+                <a href="mailto:hello@getsorted.co.uk" class="btn-primary">Get Started Today</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="34" height="34" rx="8" stroke="#C9A96E" stroke-width="1.5" stroke-opacity="0.4"/>
+                    <path d="M11 18.5L15.5 23L25 13" stroke="#C9A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4"/>
+                </svg>
+                <span class="footer-text">© 2026 GetSorted. All rights reserved.</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:hello@getsorted.co.uk">hello@getsorted.co.uk</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+            });
+        });
+
+        // FAQ toggle
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const wasActive = item.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+            
+            // Open clicked (if it wasn't already open)
+            if (!wasActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
